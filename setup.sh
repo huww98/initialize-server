@@ -1,5 +1,29 @@
 #/bin/bash
 
+# Set Timezone
+# Format and mount all disks as follow:
+# NAME                      SIZE TYPE  MOUNTPOINT
+# sda                     223.6G disk
+# ├─sda1                      1M part
+# ├─sda2                      1G part  /boot
+# └─sda3                  222.6G part
+#   └─ubuntu-vg/ubuntu-lv 222.6G lvm   /
+# sdb                     953.9G disk
+# └─sdb1                  953.9G part
+#   └─ssd-vg/ssd-lv       953.9G lvm   /mnt/ssd
+# sdc                       5.5T disk
+# └─sdc1                    5.5T part
+#   └─md/hdd               10.9T raid0
+#     ├─hdd-vg/dataset-lv     3T lvm   /mnt/dataset
+#     └─hdd-vg/home-lv      7.9T lvm   /home
+# sdd                       5.5T disk
+# └─sdd1                    5.5T part
+#   └─md/hdd               10.9T raid0
+#     ├─hdd-vg/dataset-lv     3T lvm   /mnt/dataset
+#     └─hdd-vg/home-lv      7.9T lvm   /home
+#
+# May need some manual cleanup
+
 set -e
 
 if pvs | grep '/dev/sd[cd]'
