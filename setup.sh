@@ -5,25 +5,32 @@ set -e
 if pvs | grep '/dev/sd[cd]'
 then
     echo "HDD already used as LVM PV"; exit 1;
-done
+fi
 
 if grep 'sd[cd]' /proc/mdstat
 then
     echo "HDD already used as MD"; exit 1;
-done
+fi
 
 for sd in /dev/sd{a,b,c,d}
 do
     fdisk -l $sd | grep -q "Disklabel type: gpt" || { echo "$sd disklabel type is not GPT"; exit 1; }
 done
 
+timedatectl set-timezone Asia/Shanghai
+
 lvextend ubuntu-vg/ubuntu-lv --extents +100%FREE
 resize2fs /dev/ubuntu-vg/ubuntu-lv
 
+sfdisk --part-type /dev/sdb 1 E6D6D379-F507-44C2-A23C-238F2A3DF928 # Linux LVM
 pvcreate /dev/sdb1 -y
 vgcreate ssd-vg /dev/sdb1
 lvcreate ssd-vg --name ssd-lv --extents 100%VG
 
+for sd in /dev/sd{c,d}
+do
+    sfdisk --part-type $sd 1 A19D880F-05FC-4D3B-A006-743F0F84911E # Linux RAID
+done
 mdadm --create /dev/md/hdd --level raid0 --raid-devices=2 /dev/sdc1 /dev/sdd1
 pvcreate /dev/md/hdd
 vgcreate hdd-vg /dev/md/hdd
