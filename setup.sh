@@ -33,13 +33,18 @@ fi
 
 if grep 'sd[cd]' /proc/mdstat
 then
-    echo "HDD already used as MD"; exit 1;
+    echo "HDD already used as MD"
+    mdadm --stop /dev/md0
 fi
 
 for sd in /dev/sd{a,b,c,d}
 do
     fdisk -l $sd | grep -q "Disklabel type: gpt" || { echo "$sd disklabel type is not GPT"; exit 1; }
 done
+
+sed --in-place "s/archive.ubuntu.com/mirrors.tuna.tsinghua.edu.cn/" /etc/apt/sources.list
+apt-get update
+apt-get upgrade
 
 timedatectl set-timezone Asia/Shanghai
 
@@ -55,6 +60,7 @@ for sd in /dev/sd{c,d}
 do
     sfdisk --part-type $sd 1 A19D880F-05FC-4D3B-A006-743F0F84911E # Linux RAID
 done
+mdadm --stop /dev/md0 || true
 mdadm --create /dev/md/hdd --level raid0 --raid-devices=2 /dev/sdc1 /dev/sdd1
 pvcreate /dev/md/hdd
 vgcreate hdd-vg /dev/md/hdd
