@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 
 # Set Timezone
 # Format and mount all disks as follow:
