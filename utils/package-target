@@ -1,0 +1,11 @@
+#!/bin/bash
+
+required-target root
+
+if ! dpkg-query --show "${PACKAGES[@]}"
+then
+    package-prepare-install || exit 1
+    apt-get update || exit 1
+    apt-get install -y "${PACKAGES[@]}" || exit 1
+    [[ $(type -t package-after-install) == "function" ]] && package-after-install
+fi

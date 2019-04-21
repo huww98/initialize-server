@@ -1,0 +1,81 @@
+#!/bin/bash
+
+TEMP=$(getopt --options 'h' --long 'help,debug' --name 'initserv' -- "$@")
+
+if [ $? -ne 0 ]; then
+    echo 'Incorrect usage' >&2
+    exit 1
+fi
+
+eval set -- "$TEMP"
+unset TEMP
+
+while true; do
+    case "$1" in
+    '-h' | '--help')
+        echo 'TODO help'
+        shift
+        continue
+        ;;
+    '--debug')
+        DEBUG="ON"
+        shift
+        continue
+        ;;
+    '--')
+        shift
+        break
+        ;;
+    *)
+        echo 'Internal error!' >&2
+        exit 1
+        ;;
+    esac
+done
+
+TARGET="default"
+if [[ $# -eq 1 ]]; then
+    TARGET="$1"
+fi
+
+debug() {
+    if [[ $DEBUG == "ON" ]]; then
+        echo "debug: $1"
+    fi
+}
+
+error() {
+    echo "$(tput setaf 1)error: $1$(tput sgr 0)"
+}
+
+target() {
+    local TARGET_FILE="targets/$1"
+    if [[ ! -r "$TARGET_FILE" ]]; then
+        error "Target $1 does not exists"
+        return 1
+    fi
+
+    if [[ -v CURRENT_TARGET ]]; then
+        debug "Started target $1, required by $CURRENT_TARGET"
+    else
+        debug "Started target $1"
+    fi
+
+    local CURRENT_TARGET="$1"
+    (. "$TARGET_FILE") || {
+        RET=$?
+        debug "Target $1 failed"
+        return $RET
+    }
+    debug "Reached target $1"
+}
+
+required-target() {
+    target "$@" || {
+        RET=$?
+        debug "Target $1 required by $CURRENT_TARGET, exiting"
+        exit $RET
+    }
+}
+
+target "$TARGET"

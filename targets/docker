@@ -1,0 +1,11 @@
+#!/bin/bash
+
+PACKAGES=(docker-ce docker-ce-cli containerd.io)
+
+package-prepare-install() {
+    apt-get remove docker docker-engine docker.io containerd runc
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+    add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+}
+
+. utils/package-target docker

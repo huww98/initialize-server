@@ -1,0 +1,10 @@
+#!/bin/bash
+
+PACKAGES=("nvidia-driver-*")
+
+package-prepare-install() {
+    add-apt-repository ppa:graphics-drivers/ppa
+    PACKAGES=("nvidia-driver-418")
+}
+
+. utils/package-target nvidia-driver

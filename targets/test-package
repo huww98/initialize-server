@@ -1,0 +1,13 @@
+#!/bin/bash
+
+PACKAGES=(non-exist-package)
+
+package-prepare-install() {
+    echo "preparing install test package"
+}
+
+package-after-install() {
+    echo "test package installed"
+}
+
+. utils/package-target

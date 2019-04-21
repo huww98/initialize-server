@@ -1,0 +1,6 @@
+#!/bin/bash
+echo test invoked
+
+required-target test-package
+
+echo test target

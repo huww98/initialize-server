@@ -1,0 +1,5 @@
+#!/bin/bash
+[[ $EUID -eq 0 ]] || {
+    error "Required to be run as root user."
+    exit 1
+}

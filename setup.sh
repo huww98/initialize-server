@@ -31,12 +31,6 @@ then
     echo "HDD already used as LVM PV"; exit 1;
 fi
 
-if grep 'sd[cd]' /proc/mdstat
-then
-    echo "HDD already used as MD"
-    mdadm --stop /dev/md0
-fi
-
 for sd in /dev/sd{a,b,c,d}
 do
     fdisk -l $sd | grep -q "Disklabel type: gpt" || { echo "$sd disklabel type is not GPT"; exit 1; }
@@ -56,6 +50,7 @@ pvcreate /dev/sdb1 -y
 vgcreate ssd-vg /dev/sdb1
 lvcreate ssd-vg --name ssd-lv --extents 100%VG
 
+mdadm --stop /dev/md0 || true
 for sd in /dev/sd{c,d}
 do
     sfdisk --part-type $sd 1 A19D880F-05FC-4D3B-A006-743F0F84911E # Linux RAID
