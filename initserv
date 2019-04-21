@@ -73,7 +73,7 @@ target() {
 required-target() {
     target "$@" || {
         RET=$?
-        debug "Target $1 required by $CURRENT_TARGET, exiting"
+        error "Target $1 failed but required by $CURRENT_TARGET, exiting"
         exit $RET
     }
 }

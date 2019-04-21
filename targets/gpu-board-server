@@ -1,5 +1,8 @@
 #!/bin/bash
 
+required-target root
+required-target nvidia-docker
+
 mkdir -p /opt/gpu-board
 cat > /opt/gpu-board/start-server.sh << EOF
 docker run --detach --runtime nvidia --pid host \

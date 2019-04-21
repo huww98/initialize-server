@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if ! grep -q "//archive.ubuntu.com" /etc/apt/sources.list; then
+    return 0
+fi
+
+required-target root
+
+sed --in-place "s/archive.ubuntu.com/mirrors.tuna.tsinghua.edu.cn/" /etc/apt/sources.list

@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if date | grep -q CST; then
+    return 0
+fi
+
+required-target root
+
+timedatectl set-timezone Asia/Shanghai
