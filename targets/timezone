@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if date | grep -q CST; then
+if [[ /etc/localtime -ef /usr/share/zoneinfo/PRC ]]; then
     return 0
 fi
 

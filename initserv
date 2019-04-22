@@ -33,11 +33,6 @@ while true; do
     esac
 done
 
-TARGET="default"
-if [[ $# -eq 1 ]]; then
-    TARGET="$1"
-fi
-
 debug() {
     if [[ $DEBUG == "ON" ]]; then
         echo "debug: $1"
@@ -78,4 +73,10 @@ required-target() {
     }
 }
 
-target "$TARGET"
+for t; do
+    target "$t"
+done
+
+if [[ $# -eq 0 ]]; then
+    target "default"
+fi
