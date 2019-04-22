@@ -43,11 +43,18 @@ error() {
     echo "$(tput setaf 1)error: $1$(tput sgr 0)"
 }
 
+declare -A REACHED_TARGETS
+
 target() {
     local TARGET_FILE="targets/$1"
     if [[ ! -r "$TARGET_FILE" ]]; then
         error "Target $1 does not exists"
         return 1
+    fi
+
+    if [[ ${REACHED_TARGETS[$1]} == "YES" ]]; then
+        debug "Target $1 already reached. skipping"
+        return 0
     fi
 
     if [[ -v CURRENT_TARGET ]]; then
@@ -57,19 +64,20 @@ target() {
     fi
 
     local CURRENT_TARGET="$1"
-    (. "$TARGET_FILE") || {
+    . "$TARGET_FILE" || {
         RET=$?
         debug "Target $1 failed"
         return $RET
     }
     debug "Reached target $1"
+    REACHED_TARGETS[$1]="YES"
 }
 
 required-target() {
     target "$@" || {
         RET=$?
         error "Target $1 failed but required by $CURRENT_TARGET, exiting"
-        exit $RET
+        return $RET
     }
 }
 

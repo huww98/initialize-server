@@ -4,6 +4,6 @@ if ! grep -q "//archive.ubuntu.com" /etc/apt/sources.list; then
     return 0
 fi
 
-required-target root
+required-target root || return 1
 
 sed --in-place "s/archive.ubuntu.com/mirrors.tuna.tsinghua.edu.cn/" /etc/apt/sources.list

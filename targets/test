@@ -1,6 +1,6 @@
 #!/bin/bash
 echo test invoked
 
-required-target test-package
+required-target test-package || return 1
 
 echo test target

@@ -4,8 +4,8 @@ if dpkg-query --show "${PACKAGES[@]}"; then
     return 0
 fi
 
-required-target root
-package-prepare-install || exit 1
-apt-get update || exit 1
-apt-get install -y "${PACKAGES[@]}" || exit 1
+required-target root || return 1
+package-prepare-install || return 1
+apt-get update || return 1
+apt-get install -y "${PACKAGES[@]}" || return 1
 [[ $(type -t package-after-install) == "function" ]] && package-after-install

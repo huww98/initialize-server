@@ -4,6 +4,6 @@ if [[ /etc/localtime -ef /usr/share/zoneinfo/PRC ]]; then
     return 0
 fi
 
-required-target root
+required-target root || return 1
 
 timedatectl set-timezone Asia/Shanghai

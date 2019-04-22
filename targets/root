@@ -1,4 +1,4 @@
 #!/bin/bash
 [[ $EUID -eq 0 ]] || {
-    exit 1
+    return 1
 }

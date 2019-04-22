@@ -2,5 +2,5 @@
 
 target root || groups | grep -q "docker" || {
     error "Either run with root or with docker group"
-    exit 1;
+    return 1;
 }
