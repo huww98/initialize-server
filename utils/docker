@@ -1,0 +1,19 @@
+#!/bin/bash
+
+required-target docker || return 1
+required-target docker-privilege || return 1
+
+container-running() {
+    [[ $(docker ps --quiet --filter name="^/${1}$") ]]
+}
+
+container-exists() {
+    [[ $(docker ps --all --quiet --filter name="^/${1}$") ]]
+}
+
+remove-container-if-exists() {
+    if container-exists $1; then
+        echo "removing container $1"
+        docker rm -f $1
+    fi
+}

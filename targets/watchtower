@@ -1,0 +1,12 @@
+#!/bin/bash
+
+. utils/docker || return 1
+
+NAME="watchtower"
+
+remove-container-if-exists $NAME
+
+docker run --detach \
+  --name $NAME \
+  --volume /var/run/docker.sock:/var/run/docker.sock \
+  containrrr/watchtower --label-enable

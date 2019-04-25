@@ -1,25 +1,19 @@
 #!/bin/bash
 
-required-target root
-required-target nvidia-docker
+required-target nvidia-docker || return 1
 
-mkdir -p /opt/gpu-board
-cat > /opt/gpu-board/start-server.sh << EOF
+. utils/docker || return 1
+
+NAME="gpu-board-server"
+IMAGE="huww98/gpu-board-server:deploy"
+
+remove-container-if-exists $NAME 
+
+docker pull $IMAGE
 docker run --detach --runtime nvidia --pid host \
-    --name gpu-board-server \
+    --name $NAME \
     --restart always \
     --volume /etc/passwd:/etc/passwd:ro \
     --publish 8000:8000 \
-    huww98/gpu-board-server
-EOF
-chmod +x /opt/gpu-board/start-server.sh
-
-if docker ps | grep -q "gpu-board-server"
-then
-    echo gpu-board-server Already deployed.
-    echo Will update and restart
-    docker pull huww98/gpu-board-server
-    docker rm -f gpu-board-server
-fi
-
-/opt/gpu-board/start-server.sh
+    --label=com.centurylinklabs.watchtower.enable=true \
+    $IMAGE
