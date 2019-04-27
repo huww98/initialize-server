@@ -8,4 +8,7 @@ required-target root || return 1
 package-prepare-install || return 1
 apt-get update || return 1
 apt-get install -y "${PACKAGES[@]}" || return 1
-[[ $(type -t package-after-install) == "function" ]] && package-after-install
+if [[ $(type -t package-after-install) == "function" ]]; then
+    package-after-install || return 1
+fi
+return 0

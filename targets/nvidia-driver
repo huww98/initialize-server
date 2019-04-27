@@ -3,8 +3,10 @@
 PACKAGES=("nvidia-driver-*")
 
 package-prepare-install() {
-    add-apt-repository ppa:graphics-drivers/ppa
+    wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/cuda-repo-ubuntu1804_10.1.105-1_amd64.deb -O /tmp/cuda.deb || return 1
+    dpkg -i /tmp/cuda.deb || return 1
+    apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/7fa2af80.pub || return 1
     PACKAGES=("nvidia-driver-418")
 }
 
-. utils/package-target nvidia-driver
+. utils/package-target nvidia-driver || return 1

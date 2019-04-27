@@ -1,0 +1,5 @@
+#!/bin/bash
+
+required-target root || return 1
+
+apt-get upgrade -y
