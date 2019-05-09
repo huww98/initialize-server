@@ -1,4 +1,4 @@
 #!/bin/bash
 
-user/miniconda
-user/pipy-mirror
+target user/miniconda
+target user/pipy-mirror
