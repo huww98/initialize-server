@@ -4,3 +4,4 @@ target user/miniconda
 target user/pipy-mirror
 target user/anaconda-tuna-mirror
 target user/anaconda-update
+target user/git-config

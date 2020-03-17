@@ -1,0 +1,4 @@
+#!/bin/bash
+
+git config --global user.email "huww98@163.com"
+git config --global user.name "胡玮文"
