@@ -1,0 +1,5 @@
+#!/bin/bash
+
+required-target user/miniconda || return 1
+
+conda update --all --yes
