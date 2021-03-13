@@ -1,0 +1,5 @@
+#!/bin/bash
+
+required-target user/miniconda || return 1
+
+pip config set global.index-url https://pypi.scut-smil.cn/simple
